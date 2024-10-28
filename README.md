@@ -1,3 +1,5 @@
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/opencv-python)
+
 # Igor_Pupko_CamHack_MultiTool
 Инструмент для получения доступа к камерам
 
