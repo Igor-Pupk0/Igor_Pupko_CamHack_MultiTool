@@ -1,6 +1,6 @@
 ### Импорт библиотек
 from os import system, name
-from OpenCam_RTSP import opencam_func as mainfuncs
+import OpenCam_RTSP.openCam_functions as mainfuncs
 from time import sleep as wait
 from files.settings import init_settings_openCam_menu, get_settings
 
@@ -16,8 +16,8 @@ def main():
         Timeout = settings["settings"]["Timeout"]
         country = settings["settings"]["Country"]
         sample_country = settings["settings"]["sample_country"]
-        search_request_country = f'"RTSP/1.0 200 OK" country:"{country if country != "" else "RTSP/1.0 200 OK"}"'
-        search_request_city = f'"RTSP/1.0 200 OK" city:"{city if city != "" else "RTSP/1.0 200 OK"}"'
+        search_request_country = f'"has_screenshot:True RTSP/1.0 200 OK" country:"{country if country != "" else "has_screenshot:True 'RTSP/1.0 200 OK'"}"'
+        search_request_city = f'has_screenshot:True "RTSP/1.0 200 OK" city:"{city if city != "" else "has_screenshot:True 'RTSP/1.0 200 OK' "}"'
 
         banner = """
         ██╗ ██████╗  ██████╗ ██████╗     ██████╗ ██╗   ██╗██████╗ ██╗  ██╗ ██████╗                        
@@ -63,7 +63,7 @@ def main():
             except ValueError:
                 print(INVALID_INPUT)
                 continue
-            if inp <= 4 or inp <= 0 or inp == 99:
+            if inp <= 5 or inp <= 0 or inp == 99:
                 print("Понял")
 
                 if inp == 99:
@@ -80,34 +80,35 @@ def main():
 
 
         ### Получаем данные с API
-        if inp == 1:
-            if sample_country == "False":
-                print(search_request_city)
-                mainfuncs.get_api_results(API_KEY, search_request_city, page)
-            else:
-                print(search_request_country)
-                mainfuncs.get_api_results(API_KEY, search_request_country, page)
+        match inp:
+            case 1:
+                if sample_country == "False":
+                    print(search_request_city)
+                    mainfuncs.get_api_results(API_KEY, search_request_city, page)
+                else:
+                    print(search_request_country)
+                    mainfuncs.get_api_results(API_KEY, search_request_country, page)
 
-        ### Пингуем адреса чтобы отбросить фейки с хонипотами и записываем REAAL адреса в файл
+            ### Пингуем адреса чтобы отбросить фейки с хонипотами и записываем REAAL адреса в файл
 
-        if inp == 2:
-            mainfuncs.ping_ips_for_valid(Timeout)
+            case 2:
+                mainfuncs.ping_ips_for_valid(Timeout)
 
-        if inp == 3:
-            mainfuncs.check_open_camera(Timeout)
+            case 3:
+                mainfuncs.check_open_camera(Timeout)
 
-        if inp == 4:
-            mainfuncs.json_to_txt()
+            case 4:
+                mainfuncs.json_to_txt()
 
-        if inp == 5:
-            if sample_country == "False":
-                mainfuncs.all_in_one(API_KEY, search_request_city, page, Timeout)
-            else:
-                mainfuncs.all_in_one(API_KEY, search_request_country, page, Timeout)
+            case 5:
+                if sample_country == "False":
+                    mainfuncs.all_in_one(API_KEY, search_request_city, page, Timeout)
+                else:
+                    mainfuncs.all_in_one(API_KEY, search_request_country, page, Timeout)
 
 
-        if inp == 0:
-            exit()
+            case 0:
+                exit()
 
 
 

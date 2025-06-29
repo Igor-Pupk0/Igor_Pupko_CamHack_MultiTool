@@ -1,6 +1,6 @@
 ### Импорт библиотек
 from os import system, name
-from GoAhead_vuln_tool import mainfuncs
+import GoAhead_vuln_tool.goAhead_functions as mainfuncs
 from time import sleep
 from files.settings import init_settings_goahead_menu, get_settings
 INVALID_INPUT = "Неправильное значение"
