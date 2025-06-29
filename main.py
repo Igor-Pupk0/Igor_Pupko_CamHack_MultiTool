@@ -1,12 +1,11 @@
 from GoAhead_vuln_tool.main_goahead import main as goAheadTool_start
 from OpenCam_RTSP.mainOpenCam import main as openCamTool_start
+from files.settings import get_settings
 from os import system, name
 import json
 
 def get_version():
-    js = open("files/settings.json", "r", encoding="utf-8") # Получение данных с настроек
-    settings_parameters = json.loads(js.read())
-    js.close()
+    settings_parameters = get_settings()
     return settings_parameters["settings"]["info"]["version"]
 
 banner = f"""
@@ -45,7 +44,7 @@ def init():
     while True:
         print(f"""{banner}
               
-            1) Взлом через дырку в камерах "GoAhead"   
+            1) Взлом через дырку в камерах "GoAhead")   
             2) Сбор открытых камер работающие по RTSP
             
 
@@ -80,3 +79,4 @@ def init():
 if __name__ == "__main__":
     init()
 
+ex = input("Нажми Enter для закрытия окна")

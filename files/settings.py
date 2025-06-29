@@ -4,9 +4,20 @@ from time import sleep
 import json
 
 SETTINGS_FILE = "files/settings.json" # Путь к файлу с настройками
+SETTINGS_FILE_SOURCE = "files/settings_example.json" # Путь к шаблону с настройками
 
 def get_settings():
-    js = open(SETTINGS_FILE, "r", encoding="utf-8") # Получение данных с настроек
+    try:
+        js = open(SETTINGS_FILE, "r", encoding="utf-8") # Получение данных с настроек
+    except FileNotFoundError:
+
+        settings_source = open(SETTINGS_FILE_SOURCE, "r", encoding="utf-8")
+        with open(SETTINGS_FILE, "w", encoding="utf-8") as file:
+            file.write(settings_source.read())
+        
+        js = open(SETTINGS_FILE, "r", encoding="utf-8") # Получение данных с настроек
+
+
     settings_parameters = json.loads(js.read())
     js.close()
     return settings_parameters
@@ -101,7 +112,7 @@ def init_settings_goahead_menu():
         pass
 
     elif settings_input == 4:
-        try: settings["settings"]["page"] = int(input("Введи номер страницы: "))
+        try: settings["settings"]["page"] = int(input("Введи номер страницы (если такой страницы не будет то результата не буде): "))
         except ValueError:
             action_on_invalid_input(2)
             
@@ -168,8 +179,14 @@ def init_settings_openCam_menu():
             if input_country.upper() == i.upper():
                 fake_country = False
 
+        if input_country == "ДНР":
+            print("Critical Error: 'ДНР' Невозможно взломать ")
+            sleep(2)
+            print("Великий ДНР конечно СТРАНА! Но ВЕЛИКИЙ Пенис Душилин обезопасил ДНР настолько, что даже Игорь Пупко не способен взломать камеры тут")
+            sleep(10)
+
         if fake_country == True:
-            print("Такой страны нет")
+            print("Вирт страна, такой нет")
             action_on_invalid_input(4)
 
         else:
@@ -181,15 +198,15 @@ def init_settings_openCam_menu():
         system("notepad GoAhead_vuln_tool/countries_codes.txt")
 
     elif settings_inp == 4:
-        settings["settings"]["city"] = input("Введи название города на английском (Пример: Москва - Moscow): ").capitalize()
+        settings["settings"]["city"] = input("Введи название города на английском (Пример: Москва - Moscow, Красноярск - Krasnoyarsk): ").capitalize()
         write_settings(settings)
 
     elif settings_inp == 5:
 
         try:
-            settings["settings"]["page"] = int(input("Введи номер страницы: "))
+            settings["settings"]["page"] = int(input("Введи номер страницы (если такой страницы не будет то результата не буде): "))
         except ValueError:
-            print(INVALID_INPUT)
+            print("Неправильно введено значение, оно осталось прежним")
             action_on_invalid_input(2)
 
         write_settings(settings)
@@ -198,7 +215,7 @@ def init_settings_openCam_menu():
         try:
             settings["settings"]["Timeout"] = int(input("Введи сколько секунд будет выделяться на ожидание ответа от хоста: "))
         except ValueError:
-            print(INVALID_INPUT)
+            print("Неправильно введено значение, оно осталось прежним")
             action_on_invalid_input(2)
 
         write_settings(settings)
@@ -215,7 +232,7 @@ def init_settings_openCam_menu():
             write_settings(settings)
 
         else:
-            print(INVALID_INPUT)
+            print("Неправильно введено значение, оно осталось прежним")
             action_on_invalid_input(2)
 
     elif settings_inp == 1:

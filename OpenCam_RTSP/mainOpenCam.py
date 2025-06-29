@@ -44,7 +44,7 @@ def main():
                 1) Получение данных о открытых камерах через API
                 2) Проверка IP адресов камер на валидность
                 3) Проверка открытости камер
-                4) Преобразовать результат в формат txt
+                4) Преобразовать вывод json в txt
                 5) Все вместе
 
                 99) Настройки
@@ -58,18 +58,18 @@ def main():
 
         while True:
             print_info()
-            try: input_action = int(input("Выбери действие: "))
+            try: inp = int(input("Выбери действие: "))
 
             except ValueError:
                 print(INVALID_INPUT)
                 continue
-            if input_action <= 5 or input_action <= 0 or input_action == 99:
+            if inp <= 4 or inp <= 0 or inp == 99:
                 print("Понял")
 
-                if input_action == 99:
+                if inp == 99:
                     init_settings_openCam_menu()
 
-                elif input_action <= 6 or input_action <= 0:
+                elif inp <= 6 or inp <= 0:
                     break
 
             else:
@@ -79,7 +79,8 @@ def main():
             
 
 
-        if input_action == 1:
+        ### Получаем данные с API
+        if inp == 1:
             if sample_country == "False":
                 print(search_request_city)
                 mainfuncs.get_api_results(API_KEY, search_request_city, page)
@@ -87,24 +88,25 @@ def main():
                 print(search_request_country)
                 mainfuncs.get_api_results(API_KEY, search_request_country, page)
 
+        ### Пингуем адреса чтобы отбросить фейки с хонипотами и записываем REAAL адреса в файл
 
-        if input_action == 2:
+        if inp == 2:
             mainfuncs.ping_ips_for_valid(Timeout)
 
-        if input_action == 3:
+        if inp == 3:
             mainfuncs.check_open_camera(Timeout)
 
-        if input_action == 4:
-            mainfuncs.extract_data_from_json_file()
+        if inp == 4:
+            mainfuncs.json_to_txt()
 
-        if input_action == 5:
+        if inp == 5:
             if sample_country == "False":
                 mainfuncs.all_in_one(API_KEY, search_request_city, page, Timeout)
             else:
                 mainfuncs.all_in_one(API_KEY, search_request_country, page, Timeout)
 
 
-        if input_action == 0:
+        if inp == 0:
             exit()
 
 

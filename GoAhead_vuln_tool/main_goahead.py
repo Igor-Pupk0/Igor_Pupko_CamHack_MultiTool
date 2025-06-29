@@ -1,14 +1,9 @@
 ### Импорт библиотек
-
 from os import system, name
 from GoAhead_vuln_tool import mainfuncs
 from time import sleep
 from files.settings import init_settings_goahead_menu, get_settings
-
 INVALID_INPUT = "Неправильное значение"
-FILES_FOLDER = "GoAhead_vuln_tool/files"
-API_RESULTS_FILE = f"{FILES_FOLDER}/api_results.json"
-PINGED_IP_ADRESSES_FILE = f"{FILES_FOLDER}/pinged_ips.json"
 
 def action_on_invalid_input(sleep_time):
     print(INVALID_INPUT)
@@ -88,10 +83,10 @@ def init():
         
 
     if action_input == 1:
-        mainfuncs.get_api_results(API_KEY, search_request, page, output_file=API_RESULTS_FILE) # Получаем данные с API
+        mainfuncs.get_api_results(API_KEY, search_request, page) # Получаем данные с API
 
-    elif action_input == 2: # Пингуем адреса чтобы отбросить недействительные вместе с хонипотами и записываем остальные адреса в файл
-        mainfuncs.ping_ips_for_valid(Timeout, API_file=API_RESULTS_FILE, output_file=PINGED_IP_ADRESSES_FILE)
+    elif action_input == 2: # Пингуем адреса чтобы отбросить фейки с хонипотами и записываем REAAL адреса в файл
+        mainfuncs.ping_ips_for_valid(Timeout)
 
     elif action_input == 3: # Получаем IP адреса с имеющиеся уязвимостью и если нашли то записываем в файл
         mainfuncs.find_vuln_cameras(Timeout)
@@ -107,4 +102,4 @@ def init():
 
 def main():
     while True:
-        init()
+        exit_code = init()
